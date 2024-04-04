@@ -1,0 +1,5 @@
+use_stopwords: True
+weight_name:
+  - uniform
+cost_name:
+params:

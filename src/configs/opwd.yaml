@@ -1,0 +1,11 @@
+use_stopwords: True
+weight_name:
+  - uniform
+cost_name:
+  - euclid
+  - cosine
+params:
+  l1: 10
+  l2: 0.03
+  sigma: 10
+  max_iter: 20

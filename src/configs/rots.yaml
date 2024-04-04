@@ -1,0 +1,21 @@
+use_stopwords: True
+weight_name:
+  - sif
+cost_name:
+params:
+  alpha: 2
+  n_comp: 1
+  rots:
+    parser: dep
+    aggregation: mean
+    margin: norm_vectors
+    depth: 5
+    preg:
+      - 10
+      - 10
+      - 10
+      - 10
+      - 10
+    creg: 0
+    ereg: 0
+    coef_C: 1

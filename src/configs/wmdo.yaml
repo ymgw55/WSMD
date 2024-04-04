@@ -1,0 +1,7 @@
+use_stopwords: True
+weight_name:
+  - uniform
+cost_name:
+  - cosine
+params:
+  delta: 0.2

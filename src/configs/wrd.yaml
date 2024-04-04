@@ -1,0 +1,8 @@
+use_stopwords: True
+weight_name: 
+  - norm
+  - idf
+cost_name:
+  - cosine
+params:
+

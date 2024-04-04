@@ -1,0 +1,8 @@
+use_stopwords: True
+weight_name:
+  - uniform
+  - idf
+  - norm
+cost_name:
+  - 
+params:

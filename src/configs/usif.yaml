@@ -1,0 +1,6 @@
+use_stopwords: True
+weight_name:
+  - usif
+cost_name:
+params:
+  n_comp: 5

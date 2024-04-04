@@ -1,0 +1,9 @@
+use_stopwords: False
+weight_name:
+  - swf
+cost_name:
+  - cosine
+  - swd
+params:
+  a: 1.0
+
