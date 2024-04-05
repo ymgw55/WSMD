@@ -105,6 +105,12 @@ python eval_smd.py --model_name bert-base-uncased --emb_layer 0 --task PAWSWiki 
 python eval_wsmd.py --model_name bert-base-uncased --emb_layer 0 --task PAWSWiki --dataset sample --whiten True --normalize False --full False --lambd 0.5 --root_dir /working
 ```
 
+Then, we collect all results as follows:
+```bash
+python collect_results.py --model_name bert-base-uncased --emb_layer 0 --attn_layer 6 --attn_layers "[4,5,6,7,8,9,10,11]" --task PAWSWiki --dataset sample --full False --root_dir /working
+```
+Here, `attn_layer` is choosed by dev set and `attn_layers` are choosed by $BV_A$.
+
 ## References
 We have made use of many publicly available codes. We are particularly grateful for the codes from the following two repositories. Thank you.
 - ROTS: https://github.com/zihao-wang/rots
