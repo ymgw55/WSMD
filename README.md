@@ -1,6 +1,6 @@
 # WSMD
 
-> [Improving word mover’s distance by leveraging self-attention matrix](https://arxiv.org/abs/2211.06229)                 
+> [Improving word mover’s distance by leveraging self-attention matrix](https://aclanthology.org/2023.findings-emnlp.746/)                 
 > [Hiroaki Yamagiwa](https://ymgw55.github.io/), [Sho Yokoi](https://www.cl.ecei.tohoku.ac.jp/~yokoi/), [Hidetoshi Shimodaira](http://stat.sys.i.kyoto-u.ac.jp/members/shimo/)                 
 > *EMNLP 2023 Findings*
 
