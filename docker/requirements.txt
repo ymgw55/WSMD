@@ -6,15 +6,15 @@ scipy==1.10.0
 fire==0.4.0
 wandb==0.12.12
 isort==5.10.1
-scikit-learn==1.1.1
+scikit-learn>=1.5.0
 matplotlib==3.5.1
 seaborn==0.12.2
 protobuf==3.20.3
 
 # nlp
 gensim==4.1.2
-transformers==4.30.0
-nltk==3.7
+transformers>=4.38.0
+nltk>=3.9
 sentence-transformers==2.2.2
 spacy==3.5.3
 
@@ -22,4 +22,4 @@ spacy==3.5.3
 pyemd==0.5.1
 networkx==2.7.1
 stanza==1.2.3
-tqdm==4.63.0
+tqdm>=4.66.3
