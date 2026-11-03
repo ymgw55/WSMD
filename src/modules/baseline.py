@@ -29,24 +29,25 @@ def BOWS(tokens1, tokens2, tokenizer):
     return sim
 
 
+def _read_word_counts(count_fn):
+    """Yield (lowercased word, count string) pairs from a word frequency file."""
+    with open(count_fn, encoding='utf8') as f:
+        for line in f:
+            fields = line.split()
+            if len(fields) == 2:
+                yield fields[0].lower(), fields[1]
+            elif fields:
+                print(line.strip())
+
+
 def get_sif_weight(
         count_fn='/working/data/datasets/sif/enwiki_vocab_min200.txt',
         a=1e-3):
     word2weight = defaultdict(lambda: 1)
-    with open(count_fn) as f:
-        lines = f.readlines()
     N = 0
-    for line in lines:
-        line = line.strip()
-        if len(line) > 0:
-            if len(line.split()) == 2:
-                k, v = line.split()
-                k = k.lower()
-                v = float(v)
-                word2weight[k] = v
-                N += v
-            else:
-                print(line)
+    for word, count in _read_word_counts(count_fn):
+        word2weight[word] = float(count)
+        N += float(count)
     for key, value in word2weight.items():
         word2weight[key] = a / (a + value / N)
     return word2weight
@@ -59,13 +60,9 @@ def get_usif_weight(
     prob = {}
     total = 0.0
 
-    for line in open(count_fn, encoding='utf8'):
-        k, v = line.split()
-        v = int(v)
-        k = k.lower()
-
-        prob[k] = v
-        total += v
+    for word, count in _read_word_counts(count_fn):
+        prob[word] = int(count)
+        total += int(count)
 
     prob = {k: (prob[k] / total) for k in prob}
     min_prob = min(prob.values())

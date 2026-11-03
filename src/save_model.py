@@ -9,6 +9,9 @@ from transformers import AutoModel, AutoTokenizer
 from utils import get_logger
 
 
+# truncate() and padding() are adapted from BERTScore (bert_score/utils.py).
+# Copyright (c) 2019 Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian Q. Weinberger,
+# and Yoav Artzi. MIT License. See third_party_licenses/bert_score-LICENSE.
 def truncate(a, tokenizer):
     tokens = tokenizer.tokenize(a)
     if len(tokens) > tokenizer.model_max_length - 2:

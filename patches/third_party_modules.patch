@@ -1,0 +1,206 @@
+diff --git a/src/modules/owmd.py b/src/modules/owmd.py
+index 26c4b34..e394655 100644
+--- a/src/modules/owmd.py
++++ b/src/modules/owmd.py
+@@ -3,0 +4,2 @@ import numpy as np
++def sinkhorn_knopp(a, b, D, lambda1, lambda2,
++                   sigma, max_iter, verbose=False, log=False):
+@@ -29,0 +32 @@ import numpy as np
++    while (iter < max_iter):
+@@ -38,0 +42 @@ import numpy as np
++            # print('Warning: numerical errors at iteration', iter)
+diff --git a/src/modules/rots.py b/src/modules/rots.py
+index fb9c85d..ca18a91 100644
+--- a/src/modules/rots.py
++++ b/src/modules/rots.py
+@@ -1,0 +2 @@ from collections import defaultdict
++from time import time
+@@ -3,0 +5 @@ import numpy as np
++import ot
+@@ -5,0 +8 @@ import spacy
++spacy_nlp = spacy.load('en_core_web_sm')
+@@ -7,0 +11,56 @@ import spacy
++def fix_words(doc, words):
++    cd = 0
++    valid_cds = []
++    for cw in range(len(words)):
++        if cd >= len(doc):
++            break
++        if words[cw] == doc[cd].text.strip():
++            valid_cds.append(cd)
++            tmp = 1
++        else:
++            tmp = 0
++            while cd + tmp < len(doc):
++                n = len(doc[cd + tmp].text)
++                if words[cw][:n] == doc[cd + tmp].text:
++                    valid_cds.append(cd)
++                    tmp += 1
++                elif words[cw][-n:] == doc[cd + tmp].text:
++                    tmp += 1
++                    break
++                else:
++                    tmp += 1
++        cd += tmp
++
++    tmp_words = []
++    for cd in valid_cds:
++        tmp_words.append(doc[cd].text)
++    print(valid_cds, words, tmp_words, [doc[idx] for idx in range(len(doc))])
++    assert len(valid_cds) == len(words)
++    return tmp_words
++
++
++def rm_words(embs, words, ws, doc):
++    tmp_embs = []
++    tmp_words = []
++    tmp_ws = []
++    for i in range(len(words)):
++        if len(words[i]) == 0:
++            idx = len(tmp_words)
++            if idx >= len(doc) or doc[idx].text != ' ':
++                continue
++        tmp_embs.append(embs[i])
++        tmp_words.append(words[i])
++        tmp_ws.append(ws[i])
++    assert len(tmp_words) == len(tmp_embs) == len(tmp_ws) == len(doc)
++    return tmp_embs, tmp_words, tmp_ws
++
++
++def words_check(embs, words, ws):
++    string_ = ' '.join(words)
++    doc = spacy_nlp(string_)
++    if len(words) < len(doc):
++        words = fix_words(doc, words)
++    elif len(words) > len(doc):
++        embs, words, ws = rm_words(embs, words, ws, doc)
++    return embs, words, ws
++
+@@ -9,0 +69 @@ class Sentence:
++    def __init__(self, vectors, words, weights, **kwargs):
+@@ -18,0 +79,2 @@ class Sentence:
++        # store the span of each word, which is the element of the tree
++        self.span_begin_index = {}
+@@ -71,0 +134 @@ class Sentence:
++        doc = spacy_nlp(self.string)
+@@ -74,0 +138 @@ class Sentence:
++
+@@ -77,0 +142,2 @@ class Sentence:
++                token: the token represented by the span,
++                which maintains the connection information of the span
+@@ -84,0 +151,2 @@ class Sentence:
++            # initialize a dummy span to secure the sid
++            token_span = (None, None, sid)
+@@ -111,0 +180,2 @@ class Sentence:
++            self.tree_level_index[l] = sorted(
++                self.tree_level_index[l], key=lambda x: x[0])
+@@ -153,0 +224,2 @@ class Sentence:
++                        self.span_vw_dict[p_span] = [
++                            _vw + vw, _wvnorm + wvnorm]
+@@ -164,0 +237,2 @@ class Sentence:
++            if li < len(self.tree_level_index[l]) and \
++                    b == self.tree_level_index[l][li][0]:
+@@ -189,0 +264,2 @@ class Sentence:
++                    if j >= len(down_span_flat):
++                        break
+@@ -206,0 +283,3 @@ def cosine(x, y):
++    M = 1 - (np.dot(x, y.T)) / (np.linalg.norm(x, axis=1, keepdims=True)
++                                * np.linalg.norm(y, axis=1,
++                                                 keepdims=True).T + 1e-10)
+@@ -218,0 +298,2 @@ class CosineSimilarity:
++            a = np.asarray([np.linalg.norm(v) * w for v,
++                           w in zip(s1.vectors, s1.weights)])
+@@ -219,0 +301,2 @@ class CosineSimilarity:
++            b = np.asarray([np.linalg.norm(v) * w for v,
++                           w in zip(s2.vectors, s2.weights)])
+@@ -224,0 +308,2 @@ class ROTS:
++    def __init__(self, parser, aggregation, margin,
++                 depth, preg, creg, ereg, coef_C):
+@@ -232,0 +318,2 @@ class ROTS:
++            aggregation: 
++            how to handle different scores [mean, max, min, last, no]
+@@ -251,0 +339,2 @@ class ROTS:
++            answer = {d: float(CosineSimilarity()(s1, s2))
++                      for d in range(self.depth)}
+@@ -255,0 +345,3 @@ class ROTS:
++            _depth = min(max(len(s1.tree_level_index),
++                         len(s2.tree_level_index)), self.depth)
++
+@@ -271,0 +364,3 @@ class ROTS:
++                C = np.sum(_a) * np.sum(_b) / (
++                    np.linalg.norm(s1.sentence_vector)
++                    * np.linalg.norm(s2.sentence_vector) + 1e-3)
+@@ -282,0 +378,2 @@ class ROTS:
++                                    prior_plan_down[di, dj] = mass * \
++                                        _a[di] * _b[dj] / local_a / local_b
+@@ -284,0 +382,2 @@ class ROTS:
++                M = M_cossim - np.log(prior_plan_down +
++                                      1e-10) * self.prior_reg[d]
+@@ -290,0 +390,2 @@ class ROTS:
++                # P = ot.unbalanced.sinkhorn_unbalanced(
++                #   a, b, M, reg=reg, reg_m=1, method="sinkhorn_stabilized")
+@@ -291,0 +393,2 @@ class ROTS:
++                answer[d] = (1 - np.sum(P * M_cossim)) * \
++                    (1 - self.coef_C + self.coef_C * C)
+@@ -311,0 +415,7 @@ class ROTS:
++def test():
++    words = ['twin', 'falls', 'part', 'jerome', 'county',
++             'id', 'micro', 'statistical' 'area']
++    doc = spacy_nlp(' '.join(words))
++    print(doc)
++    if len(words) < len(doc):
++        print(fix_words(doc, words))
+@@ -313,0 +424,2 @@ class ROTS:
++if __name__ == '__main__':
++    test()
+diff --git a/src/modules/wmdo.py b/src/modules/wmdo.py
+index ab25337..3136540 100644
+--- a/src/modules/wmdo.py
++++ b/src/modules/wmdo.py
+@@ -2,0 +3 @@ from bisect import bisect_left
++from sklearn.feature_extraction.text import CountVectorizer
+@@ -23,0 +25 @@ def takeClosest(myList, myNumber):
++def fragmentation(sent1_tokens, sent2_tokens, vc, P):
+@@ -28,0 +31 @@ def takeClosest(myList, myNumber):
++        for w in sent1_tokens:
+@@ -29,0 +33,2 @@ def takeClosest(myList, myNumber):
++            if w not in vc.get_feature_names():
++                continue
+@@ -30,0 +36,3 @@ def takeClosest(myList, myNumber):
++            index = vc.get_feature_names().index(w)
++            flow_from_w = P[index]
++            highest_flow = max(flow_from_w)
+@@ -31,0 +40,23 @@ def takeClosest(myList, myNumber):
++            if highest_flow == 0:
++                continue
++
++            feature_names_matched_indices = [
++                i for i, x in enumerate(flow_from_w) if x == highest_flow]
++            matched_words = [vc.get_feature_names()[i]
++                             for i in feature_names_matched_indices]
++
++            # check cases where word doesn't map to anything.
++            matched_indices = []
++            for m in matched_words:
++                occurrences = []
++                for i, x in enumerate(sent2_tokens):
++                    if x == m:
++                        occurrences.append(i)
++                matched_indices.append(
++                    takeClosest(occurrences, current))
++            matched_index = takeClosest(matched_indices, current)
++
++            if not current + 1 == matched_index:
++                chunks += 1
++            current = matched_index
++            matched_unigrams += 1
+@@ -33,0 +65 @@ def takeClosest(myList, myNumber):
++    except Exception as e:
+@@ -36,0 +69,7 @@ def takeClosest(myList, myNumber):
++def get_penalty(sent1_tokens, sent2_tokens, P):
++    vc = CountVectorizer(tokenizer=lambda txt: txt.split()).fit(
++        sent1_tokens + sent2_tokens)
++    penalty = fragmentation(sent1_tokens, sent2_tokens, vc, P)
++    if penalty > 1:
++        penalty = 1
++    return penalty

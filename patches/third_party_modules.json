@@ -1,0 +1,51 @@
+{
+  "src/modules/rots.py": [
+    ["rots/model/sentence.py", 2, 4],
+    ["rots/model/sentence.py", 6, 6],
+    ["rots/model/sentence.py", 9, 9],
+    ["rots/model/sentence.py", 11, 11],
+    ["rots/model/sentence.py", 14, 16],
+    ["rots/model/sentence.py", 18, 26],
+    ["rots/model/sentence.py", 28, 73],
+    ["rots/model/sentence.py", 81, 87],
+    ["rots/model/sentence.py", 90, 95],
+    ["rots/model/sentence.py", 97, 103],
+    ["rots/model/sentence.py", 105, 131],
+    ["rots/model/sentence.py", 133, 174],
+    ["rots/model/sentence.py", 176, 186],
+    ["rots/model/sentence.py", 188, 212],
+    ["rots/model/sentence.py", 214, 218],
+    ["rots/model/similarities.py", 5, 16],
+    ["rots/model/similarities.py", 18, 18],
+    ["rots/model/similarities.py", 37, 47],
+    ["rots/model/similarities.py", 49, 49],
+    ["rots/model/similarities.py", 51, 54],
+    ["rots/model/similarities.py", 175, 175],
+    ["rots/model/similarities.py", 177, 184],
+    ["rots/model/similarities.py", 186, 204],
+    ["rots/model/similarities.py", 206, 209],
+    ["rots/model/similarities.py", 212, 227],
+    ["rots/model/similarities.py", 229, 239],
+    ["rots/model/similarities.py", 241, 242],
+    ["rots/model/similarities.py", 244, 249],
+    ["rots/model/similarities.py", 251, 251],
+    ["rots/model/similarities.py", 253, 274]
+  ],
+  "src/modules/owmd.py": [
+    ["SentenceMatching/models/OWMD/order_wassertein_distance.py", 5, 5],
+    ["SentenceMatching/models/OWMD/order_wassertein_distance.py", 10, 11],
+    ["SentenceMatching/models/OWMD/order_wassertein_distance.py", 123, 148],
+    ["SentenceMatching/models/OWMD/order_wassertein_distance.py", 150, 158],
+    ["SentenceMatching/models/OWMD/order_wassertein_distance.py", 160, 184]
+  ],
+  "src/modules/wmdo.py": [
+    ["WMDO/wmdo.py", 7, 8],
+    ["WMDO/wmdo.py", 14, 34],
+    ["WMDO/wmdo.py", 36, 40],
+    ["WMDO/wmdo.py", 46, 46],
+    ["WMDO/wmdo.py", 52, 52],
+    ["WMDO/wmdo.py", 63, 63],
+    ["WMDO/wmdo.py", 68, 69],
+    ["WMDO/wmdo.py", 71, 73]
+  ]
+}

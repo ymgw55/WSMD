@@ -77,6 +77,12 @@ head -n 11 data/datasets/PAWSWiki/train.tsv > data/datasets/PAWSWiki/sample.tsv
 head -n 10 data/datasets/STSB/sts-train.csv > data/datasets/STSB/sts-sample.csv
 ```
 
+## Third-Party Modules
+Some baselines (ROTS, OWMD, and WMDO) use third-party code, which is not included in this repository. Fetch it and apply our changes with:
+```bash
+./setup/setup_third_party_modules.sh
+```
+
 ## Save Embeddings
 Calculate embeddings as follows. In the paper, we limited the dev set of PAWS Wiki to the first 1500 items. We are calculating embeddings for both this limited data and the entire data.
 ```bash
@@ -139,3 +145,7 @@ If you find our code or model useful in your research, please cite our paper:
   bibsource    = {dblp computer science bibliography, https://dblp.org}
 }
 ```
+
+# License
+
+[MIT License](LICENSE). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for third-party code.

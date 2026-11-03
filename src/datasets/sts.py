@@ -24,6 +24,9 @@ def data_all_set(data_name, data_loader, data_type=None):
     return refs, cands, gs_scores, vocab_count
 
 
+# The data loading below is adapted from SentEval (senteval/sts.py).
+# Copyright (c) 2017-present, Facebook, Inc. BSD License.
+# See third_party_licenses/SentEval-LICENSE.
 class STSB(object):
 
     def __init__(self, taskpath):

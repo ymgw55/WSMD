@@ -197,3 +197,8 @@ scripts
 *.pkl
 scripts/
 data/
+# built by setup/setup_third_party_modules.sh
+/third_party/
+/src/modules/rots.py
+/src/modules/owmd.py
+/src/modules/wmdo.py
